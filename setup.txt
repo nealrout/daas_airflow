@@ -1,0 +1,30 @@
+mkdir d:/home/airflow-docker
+cd d:/home/airflow-docker
+
+curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.7.2/docker-compose.yaml'
+
+$env:AIRFLOW_UID="50000"
+
+-- delete old containers
+docker-compose down --volumes --remove-orphans
+
+-- build airflow services
+docker-compose up airflow-init
+
+-- start airflow services
+docker-compose down
+docker-compose up -d
+
+http://localhost:8080
+ 
+ 
+-- to reload dags
+docker exec -it airflow-docker-airflow-scheduler-1 airflow dags reserialize
+
+-- DOCKER NETWORK ATTACHMENT.  
+-- I have to attach the airflow network to daas
+docker network connect daas airflow-docker-airflow-webserver-1
+docker network connect daas airflow-docker-airflow-scheduler-1
+docker network connect daas airflow-docker-airflow-worker-1
+
+docker network inspect daas
