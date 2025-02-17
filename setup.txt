@@ -16,10 +16,7 @@ docker-compose down
 docker-compose up -d
 
 http://localhost:8080
- 
- 
--- to reload dags
-docker exec -it airflow-docker-airflow-scheduler-1 airflow dags reserialize
+
 
 -- DOCKER NETWORK ATTACHMENT.  
 -- I have to attach the airflow network to daas
@@ -28,3 +25,8 @@ docker network connect daas airflow-docker-airflow-scheduler-1
 docker network connect daas airflow-docker-airflow-worker-1
 
 docker network inspect daas
+
+
+
+-- to reload dags
+docker exec -it airflow-docker-airflow-scheduler-1 airflow dags reserialize
