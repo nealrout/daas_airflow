@@ -1,33 +1,31 @@
 from airflow import DAG
 from airflow.providers.http.operators.http import SimpleHttpOperator
 from airflow.operators.python import PythonOperator
-from airflow.providers.postgres.operators.postgres import PostgresOperator
-from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from airflow.sensors.time_delta import TimeDeltaSensorAsync
 from airflow.utils.dates import days_ago
 from datetime import timedelta
 from airflow.models import Variable
 import json
-from airflow.models import Variable
 
-default_variables = {
-    "DOMAIN": "facility",
-    "DOMAIN_SOLR_KEY": "fac_nbr",
-    "DOMAIN_SOLR_COLLECTION": "facility",
-    "UPSERT_PAYLOAD": "",
-    "SOLR_EXPECTED_RECORDS":""
-}
-# Ensure all required variables exist in Airflow
-for key, value in default_variables.items():
-    if not Variable.get(key, default_var=None):
-        Variable.set(key, value)
+def load_constants():
+    """Loads domain-specific constants at execution time but allows top-level references."""
+    DOMAIN = Variable.get("DOMAIN", default_var="")
 
-# Retrieve variables from Airflow Variables
-DOMAIN = Variable.get("DOMAIN")
-DOMAIN_SOLR_KEY = Variable.get("DOMAIN_SOLR_KEY")
-DOMAIN_SOLR_COLLECTION = Variable.get("DOMAIN_SOLR_COLLECTION")
-UPSERT_PAYLOAD = json.loads(Variable.get("UPSERT_PAYLOAD"))
-SOLR_EXPECTED_RECORDS = json.loads(Variable.get("SOLR_EXPECTED_RECORDS"))
+    return {
+        "DOMAIN": DOMAIN,
+        "DOMAIN_SOLR_KEY": Variable.get(f"{DOMAIN}_DOMAIN_SOLR_KEY", default_var=""),
+        "DOMAIN_SOLR_COLLECTION": Variable.get(f"{DOMAIN}_DOMAIN_SOLR_COLLECTION", default_var=""),
+        "UPSERT_PAYLOAD": json.loads(Variable.get(f"{DOMAIN}_UPSERT_PAYLOAD", default_var="[]")),
+        "SOLR_EXPECTED_RECORDS": json.loads(Variable.get(f"{DOMAIN}_SOLR_EXPECTED_RECORDS", default_var="{}"))
+    }
+
+# Load constants ONCE when DAG is parsed
+CONSTANTS = load_constants()
+DOMAIN = CONSTANTS["DOMAIN"]
+DOMAIN_SOLR_KEY = CONSTANTS["DOMAIN_SOLR_KEY"]
+DOMAIN_SOLR_COLLECTION = CONSTANTS["DOMAIN_SOLR_COLLECTION"]
+UPSERT_PAYLOAD = CONSTANTS["UPSERT_PAYLOAD"]
+SOLR_EXPECTED_RECORDS = CONSTANTS["SOLR_EXPECTED_RECORDS"]
 
 with DAG(
     dag_id="daas_insert_generic",
@@ -35,8 +33,20 @@ with DAG(
     start_date=days_ago(1),
     catchup=False,
 ) as dag:
+    
+    def print_constant_values():
+        print (f"💡DOMAIN:💡 {DOMAIN}")
+        print (f"💡DOMAIN_SOLR_KEY:💡 {DOMAIN_SOLR_KEY}")
+        print (f"💡DOMAIN_SOLR_COLLECTION:💡 {DOMAIN_SOLR_COLLECTION}")
+        print (f"💡UPSERT_PAYLOAD:💡 {UPSERT_PAYLOAD}")
+        print (f"💡SOLR_EXPECTED_RECORDS:💡 {SOLR_EXPECTED_RECORDS}")
 
-    # Authenticate and get token
+    print_constants = PythonOperator(
+        task_id="print_constants",
+        python_callable=print_constant_values,
+        provide_context=True,
+    )
+
     authenticate = SimpleHttpOperator(
         task_id="get_auth_token",
         http_conn_id="daas_auth",
@@ -70,7 +80,7 @@ with DAG(
     )
 
     push_domain_upsert = SimpleHttpOperator(
-        task_id=f"push_{DOMAIN}_upsert",
+        task_id=f"push_generic_upsert",
         http_conn_id=f"daas_api_{DOMAIN}",
         endpoint=f"/api/{DOMAIN}/db/upsert/?facility=ALL",
         method="POST",
@@ -99,13 +109,10 @@ with DAG(
 
         docs = response_json.get("response", {}).get("docs", [])
 
-        found_records = {
-            doc.get(primary_key, f"unknown_{i}"): doc
-            for i, doc in enumerate(docs)
-        }
+        found_records = {doc.get(primary_key, f"unknown_{i}"): doc for i, doc in enumerate(docs)}
 
         print("✅ Found records:", found_records)
-        
+
         for nbr, expected_values in SOLR_EXPECTED_RECORDS.items():
             if nbr not in found_records:
                 raise ValueError(f"❌ Missing expected record: {nbr}")
@@ -126,4 +133,4 @@ with DAG(
         delta=timedelta(seconds=15),
     )
 
-    authenticate >> extract_token_task >> push_domain_upsert >> wait_task >> query_solr >> validate_solr_task
+    print_constants >> authenticate >> extract_token_task >> push_domain_upsert >> wait_task >> query_solr >> validate_solr_task
