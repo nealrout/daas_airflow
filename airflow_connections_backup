@@ -1,0 +1,115 @@
+[
+    {
+        "conn_id": "daas_api_account",
+        "conn_type": "http",
+        "description": "",
+        "extra_dejson": {
+        },
+        "get_uri": "http://http://daas-api-account:9001",
+        "host": "http://daas-api-account",
+        "id": "1",
+        "is_encrypted": "False",
+        "is_extra_encrypted": "False",
+        "login": "",
+        "password": null,
+        "port": "9001",
+        "schema": ""
+    },
+    {
+        "conn_id": "daas_api_asset",
+        "conn_type": "http",
+        "description": "",
+        "extra_dejson": {
+        },
+        "get_uri": "http://http://daas-api-asset:9003/?__extra__=%7B%7D",
+        "host": "http://daas-api-asset",
+        "id": "2",
+        "is_encrypted": "False",
+        "is_extra_encrypted": "False",
+        "login": "",
+        "password": null,
+        "port": "9003",
+        "schema": ""
+    },
+    {
+        "conn_id": "daas_api_facility",
+        "conn_type": "http",
+        "description": "",
+        "extra_dejson": {
+        },
+        "get_uri": "http://http://daas-api-facility:9002/?__extra__=%7B%7D",
+        "host": "http://daas-api-facility",
+        "id": "3",
+        "is_encrypted": "False",
+        "is_extra_encrypted": "False",
+        "login": "",
+        "password": null,
+        "port": "9002",
+        "schema": ""
+    },
+    {
+        "conn_id": "daas_api_service",
+        "conn_type": "http",
+        "description": "",
+        "extra_dejson": {
+        },
+        "get_uri": "http://http://daas-api-service:9004/?__extra__=%7B%7D",
+        "host": "http://daas-api-service",
+        "id": "4",
+        "is_encrypted": "False",
+        "is_extra_encrypted": "False",
+        "login": "",
+        "password": null,
+        "port": "9004",
+        "schema": ""
+    },
+    {
+        "conn_id": "solr_integration",
+        "conn_type": "http",
+        "description": "",
+        "extra_dejson": {
+        },
+        "get_uri": "http://http://daas:Solrsolrdaasrpwn%21@host.docker.internal:8983",
+        "host": "http://host.docker.internal",
+        "id": "7",
+        "is_encrypted": "False",
+        "is_extra_encrypted": "False",
+        "login": "daas",
+        "password": "UPDATEME",
+        "port": "8983",
+        "schema": ""
+    },
+    {
+        "conn_id": "postgres_us_int_daas",
+        "conn_type": "postgres",
+        "description": "",
+        "extra_dejson": {
+            "options": "-c search_path=daas"
+        },
+        "get_uri": "postgres://daas:d44spwn@host.docker.internal:5432/us_int_daas?options=-c+search_path%3Ddaas",
+        "host": "host.docker.internal",
+        "id": "6",
+        "is_encrypted": "False",
+        "is_extra_encrypted": "False",
+        "login": "daas",
+        "password": "d44spwn",
+        "port": "5432",
+        "schema": "us_int_daas"
+    },
+    {
+        "conn_id": "daas_auth",
+        "conn_type": "http",
+        "description": "",
+        "extra_dejson": {
+        },
+        "get_uri": "http://http://daas:Solrsolrdaasrpwn%21@daas-auth:9000/?__extra__=%7B%7D",
+        "host": "http://daas-auth",
+        "id": "5",
+        "is_encrypted": "False",
+        "is_extra_encrypted": "False",
+        "login": "daas",
+        "password": "UPDATEME",
+        "port": "9000",
+        "schema": ""
+    }
+]

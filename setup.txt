@@ -20,6 +20,29 @@ docker-compose -f D:\home\airflow-docker\docker-compose.yaml down --volumes --re
 -- REBUILD airflow services
 docker-compose -f D:\home\airflow-docker\docker-compose.yaml up airflow-init
 
+------------------------------------------------------------------------------------
+-- TO RECOVER CONNECTIONS WITHOUT HAVING TO DO IT MANUALLY. 
+-----------------------------------------------------------------------------------
+cat airflow_connections_backup.json | jq -c '.[]' | while read line; do
+    conn_id=$(echo $line | jq -r '.conn_id')
+    conn_type=$(echo $line | jq -r '.conn_type')
+    host=$(echo $line | jq -r '.host')
+    schema=$(echo $line | jq -r '.schema')
+    login=$(echo $line | jq -r '.login')
+    password=$(echo $line | jq -r '.password')
+    port=$(echo $line | jq -r '.port')
+    extra=$(echo $line | jq -r '.extra')
+
+    airflow connections add "$conn_id" \
+        --conn-type "$conn_type" \
+        --conn-host "$host" \
+        --conn-schema "$schema" \
+        --conn-login "$login" \
+        --conn-password "$password" \
+        --conn-port "$port" \
+        --conn-extra "$extra"
+done
+-----------------------------------------------------------------------------------
 
 -- DOCKER NETWORK ATTACHMENT.  
 -- I have to attach the airflow network to daas
@@ -29,6 +52,7 @@ docker network connect daas airflow-docker-airflow-worker-1
 
 docker network inspect daas
 -----------------------------------------------------------------------------------
+
 -- STOP/START airflow services
 docker-compose -f D:\home\airflow-docker\docker-compose.yaml down
 docker-compose -f D:\home\airflow-docker\docker-compose.yaml up -d
