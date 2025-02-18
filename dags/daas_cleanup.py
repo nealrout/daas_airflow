@@ -1,8 +1,8 @@
-from airflow import DAG
-from airflow.providers.http.operators.http import SimpleHttpOperator
-from airflow.operators.python import PythonOperator
-from airflow.providers.postgres.operators.postgres import PostgresOperator
-from airflow.utils.dates import days_ago
+from airflow import DAG # type: ignore
+from airflow.providers.http.operators.http import SimpleHttpOperator # type: ignore
+from airflow.operators.python import PythonOperator # type: ignore
+from airflow.providers.postgres.operators.postgres import PostgresOperator # type: ignore
+from airflow.utils.dates import days_ago # type: ignore
 import json
 import base64
 

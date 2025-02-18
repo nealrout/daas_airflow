@@ -1,10 +1,10 @@
-from airflow import DAG
-from airflow.providers.http.operators.http import SimpleHttpOperator
-from airflow.operators.python import PythonOperator
-from airflow.sensors.time_delta import TimeDeltaSensorAsync
-from airflow.utils.dates import days_ago
+from airflow import DAG # type: ignore
+from airflow.providers.http.operators.http import SimpleHttpOperator # type: ignore
+from airflow.operators.python import PythonOperator # type: ignore
+from airflow.sensors.time_delta import TimeDeltaSensorAsync # type: ignore
+from airflow.utils.dates import days_ago # type: ignore
 from datetime import timedelta
-from airflow.models import Variable
+from airflow.models import Variable # type: ignore
 import json
 
 def load_constants():

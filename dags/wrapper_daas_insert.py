@@ -1,9 +1,9 @@
 import json
-from airflow.models import Variable
-from airflow import DAG
-from airflow.operators.python import PythonOperator
-from airflow.operators.trigger_dagrun import TriggerDagRunOperator
-from airflow.utils.dates import days_ago
+from airflow.models import Variable # type: ignore
+from airflow import DAG # type: ignore
+from airflow.operators.python import PythonOperator # type: ignore
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator # type: ignore
+from airflow.utils.dates import days_ago # type: ignore
 
 # Define parameters for each domain
 domains = {
