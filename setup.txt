@@ -1,3 +1,4 @@
+--  INSTALL AIRFLOW
 mkdir d:/home/airflow-docker
 cd d:/home/airflow-docker
 
@@ -5,17 +6,19 @@ curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.7.2/docker-compose.y
 
 $env:AIRFLOW_UID="50000"
 
+-- ENVIRONMENT SETUP.  ADD to docker-compose.yaml
+    AIRFLOW_UID: 50000
+    AIRFLOW__SCHEDULER__SCHEDULER_HEARTBEAT_SEC: 1
+    AIRFLOW__SCHEDULER__JOB_HEARTBEAT_SEC: 2
+    AIRFLOW__SCHEDULER__PROCESSOR_POLL_INTERVAL: 0.5
+    AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL: 5
+    AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL: 5
+
 -- DELETE old containers
 docker-compose -f D:\home\airflow-docker\docker-compose.yaml down --volumes --remove-orphans
 
 -- REBUILD airflow services
 docker-compose -f D:\home\airflow-docker\docker-compose.yaml up airflow-init
-
--- STOP/START airflow services
-docker-compose -f D:\home\airflow-docker\docker-compose.yaml down 
-docker-compose -f D:\home\airflow-docker\docker-compose.yaml up -d
-
-http://localhost:8080
 
 
 -- DOCKER NETWORK ATTACHMENT.  
@@ -25,8 +28,12 @@ docker network connect daas airflow-docker-airflow-scheduler-1
 docker network connect daas airflow-docker-airflow-worker-1
 
 docker network inspect daas
+-----------------------------------------------------------------------------------
+-- STOP/START airflow services
+docker-compose -f D:\home\airflow-docker\docker-compose.yaml down
+docker-compose -f D:\home\airflow-docker\docker-compose.yaml up -d
 
-
+http://localhost:8080
 
 -- to reload dags
 docker exec -it airflow-docker-airflow-scheduler-1 airflow dags reserialize

@@ -133,6 +133,151 @@ domains = {
 				"status_code": "down"
             }
         })
+    },
+    "service": {
+        "DOMAIN": "service",
+        "DOMAIN_SOLR_KEY": "svc_nbr",
+        "DOMAIN_SOLR_COLLECTION": "service",
+        "UPSERT_PAYLOAD": json.dumps([
+			{
+				"acct_nbr": "INT_ACCT_NBR_01",
+				"fac_nbr": "INT_FAC_NBR_01",
+				"asset_nbr": "INT_ASSET_NBR_01",
+				"svc_nbr": "INT_INT_SVC_NBR_001",
+				"svc_code": "INT_SVC_001",
+				"svc_name": "Integration Service Name 001",
+				"status_code": "open"
+			},
+			{
+				"acct_nbr": "INT_ACCT_NBR_01",
+				"fac_nbr": "INT_FAC_NBR_01",
+				"asset_nbr": "INT_ASSET_NBR_01",
+				"svc_nbr": "INT_INT_SVC_NBR_002",
+				"svc_code": "INT_SVC_002",
+				"svc_name": "Integration Service Name 002",
+				"status_code": "close"
+			},
+			{
+				"acct_nbr": "INT_ACCT_NBR_01",
+				"fac_nbr": "INT_FAC_NBR_01",
+				"asset_nbr": "INT_ASSET_NBR_02",
+				"svc_nbr": "INT_INT_SVC_NBR_003",
+				"svc_code": "INT_SVC_003",
+				"svc_name": "Integration Service Name 003",
+				"status_code": "open"
+			},
+			{
+				"acct_nbr": "INT_ACCT_NBR_01",
+				"fac_nbr": "INT_FAC_NBR_01",
+				"asset_nbr": "INT_ASSET_NBR_02",
+				"svc_nbr": "INT_INT_SVC_NBR_004",
+				"svc_code": "INT_SVC_004",
+				"svc_name": "Integration Service Name 004",
+				"status_code": "close"
+			},
+			{
+				"acct_nbr": "INT_ACCT_NBR_01",
+				"fac_nbr": "INT_FAC_NBR_02",
+				"asset_nbr": "INT_ASSET_NBR_03",
+				"svc_nbr": "INT_INT_SVC_NBR_005",
+				"svc_code": "INT_SVC_005",
+				"svc_name": "Integration Service Name 005",
+				"status_code": "open"
+			},
+			{
+				"acct_nbr": "INT_ACCT_NBR_01",
+				"fac_nbr": "INT_FAC_NBR_02",
+				"asset_nbr": "INT_ASSET_NBR_03",
+				"svc_nbr": "INT_INT_SVC_NBR_006",
+				"svc_code": "INT_SVC_006",
+				"svc_name": "Integration Service Name 006",
+				"status_code": "close"
+			},
+			{
+				"acct_nbr": "INT_ACCT_NBR_01",
+				"fac_nbr": "INT_FAC_NBR_02",
+				"asset_nbr": "INT_ASSET_NBR_04",
+				"svc_nbr": "INT_INT_SVC_NBR_007",
+				"svc_code": "INT_SVC_007",
+				"svc_name": "Integration Service Name 007",
+				"status_code": "open"
+			},
+			{
+				"acct_nbr": "INT_ACCT_NBR_01",
+				"fac_nbr": "INT_FAC_NBR_02",
+				"asset_nbr": "INT_ASSET_NBR_04",
+				"svc_nbr": "INT_INT_SVC_NBR_008",
+				"svc_code": "INT_SVC_008",
+				"svc_name": "Integration Service Name 008",
+				"status_code": "close"
+			}
+        ]),
+        "SOLR_EXPECTED_RECORDS": json.dumps({
+            "INT_INT_SVC_NBR_001": {
+				"acct_nbr": "INT_ACCT_NBR_01",
+				"fac_nbr": "INT_FAC_NBR_01",
+				"asset_nbr": "INT_ASSET_NBR_01",
+				"svc_code": "INT_SVC_001",
+				"svc_name": "Integration Service Name 001",
+				"status_code": "open"
+            },
+            "INT_INT_SVC_NBR_002": {
+				"acct_nbr": "INT_ACCT_NBR_01",
+				"fac_nbr": "INT_FAC_NBR_01",
+				"asset_nbr": "INT_ASSET_NBR_01",
+				"svc_code": "INT_SVC_002",
+				"svc_name": "Integration Service Name 002",
+				"status_code": "close"
+            },
+            "INT_INT_SVC_NBR_003": {
+				"acct_nbr": "INT_ACCT_NBR_01",
+				"fac_nbr": "INT_FAC_NBR_01",
+				"asset_nbr": "INT_ASSET_NBR_02",
+				"svc_code": "INT_SVC_003",
+				"svc_name": "Integration Service Name 003",
+				"status_code": "open"
+            },
+            "INT_INT_SVC_NBR_004": {
+				"acct_nbr": "INT_ACCT_NBR_01",
+				"fac_nbr": "INT_FAC_NBR_01",
+				"asset_nbr": "INT_ASSET_NBR_02",
+				"svc_code": "INT_SVC_004",
+				"svc_name": "Integration Service Name 004",
+				"status_code": "close"
+            },
+            "INT_INT_SVC_NBR_005": {
+				"acct_nbr": "INT_ACCT_NBR_02",
+				"fac_nbr": "INT_FAC_NBR_02",
+				"asset_nbr": "INT_ASSET_NBR_03",
+				"svc_code": "INT_SVC_005",
+				"svc_name": "Integration Service Name 005",
+				"status_code": "open"
+            },
+            "INT_INT_SVC_NBR_006": {
+				"acct_nbr": "INT_ACCT_NBR_02",
+				"fac_nbr": "INT_FAC_NBR_02",
+				"asset_nbr": "INT_ASSET_NBR_03",
+				"svc_code": "INT_SVC_006",
+				"svc_name": "Integration Service Name 006",
+				"status_code": "close"
+            },
+            "INT_INT_SVC_NBR_007": {
+				"acct_nbr": "INT_ACCT_NBR_02",
+				"fac_nbr": "INT_FAC_NBR_02",
+				"asset_nbr": "INT_ASSET_NBR_04",
+				"svc_code": "INT_SVC_007",
+				"svc_name": "Integration Service Name 007",
+				"status_code": "open"
+            },
+            "INT_INT_SVC_NBR_008": {
+				"acct_nbr": "INT_ACCT_NBR_02",
+				"fac_nbr": "INT_FAC_NBR_02",
+				"asset_nbr": "INT_ASSET_NBR_04",
+				"svc_code": "INT_SVC_008",
+				"svc_name": "Integration Service Name 008",
+				"status_code": "close"
+            }
+        })
     }
 }
 
@@ -205,5 +350,20 @@ with DAG(
         wait_for_completion=True,  
     )
 
+    # Task to set DOMAIN for "service"
+    set_domain_service = PythonOperator(
+        task_id="set_domain_service",
+        python_callable=set_domain_variable,
+        op_kwargs={"domain": "service"},
+    )
+
+    # Trigger `service` DAG only after `asset` DAG finishes
+    trigger_service = TriggerDagRunOperator(
+        task_id="trigger_child_dag_service",
+        trigger_dag_id="daas_insert_generic",
+        conf={"DOMAIN": "service"},
+        wait_for_completion=True,  
+    )
+
     # Ensure sequential execution: set DOMAIN → trigger DAG → set DOMAIN → trigger DAG
-    trigger_cleanup >> set_domain_account >> trigger_account >> set_domain_facility >> trigger_facility >> set_domain_asset >> trigger_asset
+    trigger_cleanup >> set_domain_account >> trigger_account >> set_domain_facility >> trigger_facility >> set_domain_asset >> trigger_asset >> set_domain_service >> trigger_service

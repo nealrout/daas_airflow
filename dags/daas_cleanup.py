@@ -33,7 +33,6 @@ with DAG(
             "Content-Type": "application/json"
         },
         data=json.dumps({"delete": {"query": "acct_nbr:INT_*"}}),
-        # data=json.dumps({"delete": {"id": "INT_ACCT_NBR_01"}}),  
         log_response=True,  # 
     )
     # Cleanup SOLR ACCOUNT data
@@ -46,7 +45,6 @@ with DAG(
             "Content-Type": "application/json"
         },
         data=json.dumps({"delete": {"query": "fac_nbr:INT_*"}}),
-        # data=json.dumps({"delete": {"id": "INT_ACCT_NBR_01"}}),  
         log_response=True,  # 
     )
     # Cleanup SOLR ASSET data
@@ -59,7 +57,6 @@ with DAG(
             "Content-Type": "application/json"
         },
         data=json.dumps({"delete": {"query": "asset_nbr:INT_*"}}),
-        # data=json.dumps({"delete": {"id": "INT_ACCT_NBR_01"}}),  
         log_response=True,  # 
     )
     # Cleanup SOLR SERVICE data
@@ -72,7 +69,6 @@ with DAG(
             "Content-Type": "application/json"
         },
         data=json.dumps({"delete": {"query": "svc_nbr:INT_*"}}),
-        # data=json.dumps({"delete": {"id": "INT_ACCT_NBR_01"}}),  
         log_response=True,  # 
     )
 
