@@ -64,6 +64,75 @@ domains = {
                 "fac_name": "Integration facility 02"
             }
         })
+    },
+    "asset": {
+        "DOMAIN": "asset",
+        "DOMAIN_SOLR_KEY": "asset_nbr",
+        "DOMAIN_SOLR_COLLECTION": "asset",
+        "UPSERT_PAYLOAD": json.dumps([
+			{
+				"acct_nbr": "INT_ACCT_NBR_01",
+				"fac_nbr": "INT_FAC_NBR_01",
+				"asset_nbr": "INT_ASSET_NBR_01",
+				"sys_id": "INT_system_01",
+				"asset_code": "INT_asset_code_01",
+				"status_code": "up"
+			},
+			{
+				"acct_nbr": "INT_ACCT_NBR_01",
+				"fac_nbr": "INT_FAC_NBR_01",
+				"asset_nbr": "INT_ASSET_NBR_02",
+				"sys_id": "INT_system_02",
+				"asset_code": "INT_asset_code_02",
+				"status_code": "down"
+			},
+			{
+				"acct_nbr": "INT_ACCT_NBR_02",
+				"fac_nbr": "INT_FAC_NBR_02",
+				"asset_nbr": "INT_ASSET_NBR_03",
+				"sys_id": "INT_system_03",
+				"asset_code": "INT_asset_code_03",
+				"status_code": "up"
+			},
+			{
+				"acct_nbr": "INT_ACCT_NBR_02",
+				"fac_nbr": "INT_FAC_NBR_02",
+				"asset_nbr": "INT_ASSET_NBR_04",
+				"sys_id": "INT_system_04",
+				"asset_code": "INT_asset_code_04",
+				"status_code": "down"
+			}
+        ]),
+        "SOLR_EXPECTED_RECORDS": json.dumps({
+            "INT_ASSET_NBR_01": {
+                "acct_nbr": "INT_ACCT_NBR_01",
+                "fac_nbr": "INT_FAC_NBR_01",
+                "sys_id": "INT_system_01",
+				"asset_code": "INT_asset_code_01",
+				"status_code": "up"
+            },
+            "INT_ASSET_NBR_02": {
+                "acct_nbr": "INT_ACCT_NBR_01",
+                "fac_nbr": "INT_FAC_NBR_01",
+                "sys_id": "INT_system_02",
+				"asset_code": "INT_asset_code_02",
+				"status_code": "down"
+            },
+            "INT_ASSET_NBR_03": {
+                "acct_nbr": "INT_ACCT_NBR_02",
+                "fac_nbr": "INT_FAC_NBR_02",
+                "sys_id": "INT_system_03",
+				"asset_code": "INT_asset_code_03",
+				"status_code": "up"
+            },
+            "INT_ASSET_NBR_04": {
+                "acct_nbr": "INT_ACCT_NBR_02",
+                "fac_nbr": "INT_FAC_NBR_02",
+                "sys_id": "INT_system_04",
+				"asset_code": "INT_asset_code_04",
+				"status_code": "down"
+            }
+        })
     }
 }
 
@@ -84,6 +153,12 @@ with DAG(
     start_date=days_ago(1),
     catchup=False,
 ) as dag:
+    # Task to delete all test data before starting.
+    trigger_cleanup = TriggerDagRunOperator(
+        task_id="trigger_daas_cleanup",
+        trigger_dag_id="daas_cleanup",  
+        wait_for_completion=True,  
+    )
 
     # Task to set DOMAIN for "account"
     set_domain_account = PythonOperator(
@@ -97,7 +172,7 @@ with DAG(
         task_id="trigger_child_dag_account",
         trigger_dag_id="daas_insert_generic",
         conf={"DOMAIN": "account"},
-        wait_for_completion=True,  # Wait until the "account" execution completes
+        wait_for_completion=True,  
     )
 
     # Task to set DOMAIN for "facility"
@@ -112,8 +187,23 @@ with DAG(
         task_id="trigger_child_dag_facility",
         trigger_dag_id="daas_insert_generic",
         conf={"DOMAIN": "facility"},
-        wait_for_completion=True,  # Ensures "facility" execution completes
+        wait_for_completion=True,  
+    )
+
+    # Task to set DOMAIN for "asset"
+    set_domain_asset = PythonOperator(
+        task_id="set_domain_asset",
+        python_callable=set_domain_variable,
+        op_kwargs={"domain": "asset"},
+    )
+
+    # Trigger `asset` DAG only after `facility` DAG finishes
+    trigger_asset = TriggerDagRunOperator(
+        task_id="trigger_child_dag_asset",
+        trigger_dag_id="daas_insert_generic",
+        conf={"DOMAIN": "asset"},
+        wait_for_completion=True,  
     )
 
     # Ensure sequential execution: set DOMAIN → trigger DAG → set DOMAIN → trigger DAG
-    set_domain_account >> trigger_account >> set_domain_facility >> trigger_facility
+    trigger_cleanup >> set_domain_account >> trigger_account >> set_domain_facility >> trigger_facility >> set_domain_asset >> trigger_asset
