@@ -9,7 +9,7 @@ import json
 
 def load_constants():
     """Loads domain-specific constants at execution time but allows top-level references."""
-    DOMAIN = Variable.get("DOMAIN", default_var="")
+    DOMAIN = Variable.get("DOMAIN", default_var="account")
 
     return {
         "DOMAIN": DOMAIN,
