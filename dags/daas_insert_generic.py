@@ -80,7 +80,7 @@ with DAG(
     )
 
     push_domain_upsert = SimpleHttpOperator(
-        task_id=f"push_generic_upsert",
+        task_id=f"push_domain_upsert",
         http_conn_id=f"daas_api_{DOMAIN}",
         endpoint=f"/api/{DOMAIN}/db/upsert/?facility=ALL",
         method="POST",

@@ -314,7 +314,7 @@ with DAG(
 
     # Trigger `account` DAG first and wait for completion
     trigger_account = TriggerDagRunOperator(
-        task_id="trigger_child_dag_account",
+        task_id="trigger_daas_insert_generic_account",
         trigger_dag_id="daas_insert_generic",
         conf={"DOMAIN": "account"},
         wait_for_completion=True,  
@@ -329,7 +329,7 @@ with DAG(
 
     # Trigger `facility` DAG only after `account` DAG finishes
     trigger_facility = TriggerDagRunOperator(
-        task_id="trigger_child_dag_facility",
+        task_id="trigger_daas_insert_generic_facility",
         trigger_dag_id="daas_insert_generic",
         conf={"DOMAIN": "facility"},
         wait_for_completion=True,  
@@ -344,7 +344,7 @@ with DAG(
 
     # Trigger `asset` DAG only after `facility` DAG finishes
     trigger_asset = TriggerDagRunOperator(
-        task_id="trigger_child_dag_asset",
+        task_id="trigger_daas_insert_generic_asset",
         trigger_dag_id="daas_insert_generic",
         conf={"DOMAIN": "asset"},
         wait_for_completion=True,  
@@ -359,7 +359,7 @@ with DAG(
 
     # Trigger `service` DAG only after `asset` DAG finishes
     trigger_service = TriggerDagRunOperator(
-        task_id="trigger_child_dag_service",
+        task_id="trigger_daas_insert_generic_service",
         trigger_dag_id="daas_insert_generic",
         conf={"DOMAIN": "service"},
         wait_for_completion=True,  

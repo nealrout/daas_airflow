@@ -60,6 +60,11 @@ docker network inspect daas
 docker-compose -f D:\home\airflow-docker\docker-compose.yaml down
 docker-compose -f D:\home\airflow-docker\docker-compose.yaml up -d
 
+docker network connect daas airflow-docker-airflow-webserver-1
+docker network connect daas airflow-docker-airflow-scheduler-1
+docker network connect daas airflow-docker-airflow-worker-1
+
+
 http://localhost:8080
 
 -- to reload dags
