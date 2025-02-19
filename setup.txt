@@ -21,6 +21,9 @@ docker-compose -f D:\home\airflow-docker\docker-compose.yaml down --volumes --re
 docker-compose -f D:\home\airflow-docker\docker-compose.yaml up airflow-init
 
 ------------------------------------------------------------------------------------
+-- CREATE CONNECTION BACKUP FILE
+airflow connections list --output json > airflow_connections_backup.json
+------------------------------------------------------------------------------------
 -- TO RECOVER CONNECTIONS WITHOUT HAVING TO DO IT MANUALLY. 
 -----------------------------------------------------------------------------------
 cat airflow_connections_backup.json | jq -c '.[]' | while read line; do
