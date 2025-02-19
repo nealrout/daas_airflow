@@ -9,59 +9,59 @@ from airflow.utils.dates import days_ago # type: ignore
 domains = {
     "account": {
         "DOMAIN": "account",
-        "DOMAIN_SOLR_KEY": "acct_nbr",
+        "DOMAIN_SOLR_KEY": "account_nbr",
         "DOMAIN_SOLR_COLLECTION": "account",
         "UPSERT_PAYLOAD": json.dumps([
             {
-                "acct_nbr": "INT_ACCT_NBR_01",
-                "acct_code": "INT_US_ACCT_01",
-                "acct_name": "Integration account 01"
+                "account_nbr": "INT_account_NBR_01",
+                "account_code": "INT_US_account_01",
+                "account_name": "Integration account 01"
             },
             {
-                "acct_nbr": "INT_ACCT_NBR_02",
-                "acct_code": "INT_US_ACCT_02",
-                "acct_name": "Integration account 02"
+                "account_nbr": "INT_account_NBR_02",
+                "account_code": "INT_US_account_02",
+                "account_name": "Integration account 02"
             }
         ]),
         "SOLR_EXPECTED_RECORDS": json.dumps({
-            "INT_ACCT_NBR_01": {
-                "acct_code": "INT_US_ACCT_01",
-                "acct_name": "Integration account 01"
+            "INT_account_NBR_01": {
+                "account_code": "INT_US_account_01",
+                "account_name": "Integration account 01"
             },
-            "INT_ACCT_NBR_02": {
-                "acct_code": "INT_US_ACCT_02",
-                "acct_name": "Integration account 02"
+            "INT_account_NBR_02": {
+                "account_code": "INT_US_account_02",
+                "account_name": "Integration account 02"
             }
         })
     },
     "facility": {
         "DOMAIN": "facility",
-        "DOMAIN_SOLR_KEY": "fac_nbr",
+        "DOMAIN_SOLR_KEY": "facility_nbr",
         "DOMAIN_SOLR_COLLECTION": "facility",
         "UPSERT_PAYLOAD": json.dumps([
             {
-                "acct_nbr": "INT_ACCT_NBR_01",
-                "fac_code": "INT_US_TEST_01",
-                "fac_name": "Integration facility 01",
-                "fac_nbr": "INT_FAC_NBR_01"
+                "account_nbr": "INT_account_NBR_01",
+                "facility_code": "INT_US_TEST_01",
+                "facility_name": "Integration facility 01",
+                "facility_nbr": "INT_facility_NBR_01"
             },
             {
-                "acct_nbr": "INT_ACCT_NBR_02",
-                "fac_code": "INT_US_TEST_02",
-                "fac_name": "Integration facility 02",
-                "fac_nbr": "INT_FAC_NBR_02"
+                "account_nbr": "INT_account_NBR_02",
+                "facility_code": "INT_US_TEST_02",
+                "facility_name": "Integration facility 02",
+                "facility_nbr": "INT_facility_NBR_02"
             }
         ]),
         "SOLR_EXPECTED_RECORDS": json.dumps({
-            "INT_FAC_NBR_01": {
-                "acct_nbr": "INT_ACCT_NBR_01",
-                "fac_code": "INT_US_TEST_01",
-                "fac_name": "Integration facility 01"
+            "INT_facility_NBR_01": {
+                "account_nbr": "INT_account_NBR_01",
+                "facility_code": "INT_US_TEST_01",
+                "facility_name": "Integration facility 01"
             },
-            "INT_FAC_NBR_02": {
-                "acct_nbr": "INT_ACCT_NBR_02",
-                "fac_code": "INT_US_TEST_02",
-                "fac_name": "Integration facility 02"
+            "INT_facility_NBR_02": {
+                "account_nbr": "INT_account_NBR_02",
+                "facility_code": "INT_US_TEST_02",
+                "facility_name": "Integration facility 02"
             }
         })
     },
@@ -71,32 +71,32 @@ domains = {
         "DOMAIN_SOLR_COLLECTION": "asset",
         "UPSERT_PAYLOAD": json.dumps([
 			{
-				"acct_nbr": "INT_ACCT_NBR_01",
-				"fac_nbr": "INT_FAC_NBR_01",
+				"account_nbr": "INT_account_NBR_01",
+				"facility_nbr": "INT_facility_NBR_01",
 				"asset_nbr": "INT_ASSET_NBR_01",
 				"sys_id": "INT_system_01",
 				"asset_code": "INT_asset_code_01",
 				"status_code": "up"
 			},
 			{
-				"acct_nbr": "INT_ACCT_NBR_01",
-				"fac_nbr": "INT_FAC_NBR_01",
+				"account_nbr": "INT_account_NBR_01",
+				"facility_nbr": "INT_facility_NBR_01",
 				"asset_nbr": "INT_ASSET_NBR_02",
 				"sys_id": "INT_system_02",
 				"asset_code": "INT_asset_code_02",
 				"status_code": "down"
 			},
 			{
-				"acct_nbr": "INT_ACCT_NBR_02",
-				"fac_nbr": "INT_FAC_NBR_02",
+				"account_nbr": "INT_account_NBR_02",
+				"facility_nbr": "INT_facility_NBR_02",
 				"asset_nbr": "INT_ASSET_NBR_03",
 				"sys_id": "INT_system_03",
 				"asset_code": "INT_asset_code_03",
 				"status_code": "up"
 			},
 			{
-				"acct_nbr": "INT_ACCT_NBR_02",
-				"fac_nbr": "INT_FAC_NBR_02",
+				"account_nbr": "INT_account_NBR_02",
+				"facility_nbr": "INT_facility_NBR_02",
 				"asset_nbr": "INT_ASSET_NBR_04",
 				"sys_id": "INT_system_04",
 				"asset_code": "INT_asset_code_04",
@@ -105,29 +105,29 @@ domains = {
         ]),
         "SOLR_EXPECTED_RECORDS": json.dumps({
             "INT_ASSET_NBR_01": {
-                "acct_nbr": "INT_ACCT_NBR_01",
-                "fac_nbr": "INT_FAC_NBR_01",
+                "account_nbr": "INT_account_NBR_01",
+                "facility_nbr": "INT_facility_NBR_01",
                 "sys_id": "INT_system_01",
 				"asset_code": "INT_asset_code_01",
 				"status_code": "up"
             },
             "INT_ASSET_NBR_02": {
-                "acct_nbr": "INT_ACCT_NBR_01",
-                "fac_nbr": "INT_FAC_NBR_01",
+                "account_nbr": "INT_account_NBR_01",
+                "facility_nbr": "INT_facility_NBR_01",
                 "sys_id": "INT_system_02",
 				"asset_code": "INT_asset_code_02",
 				"status_code": "down"
             },
             "INT_ASSET_NBR_03": {
-                "acct_nbr": "INT_ACCT_NBR_02",
-                "fac_nbr": "INT_FAC_NBR_02",
+                "account_nbr": "INT_account_NBR_02",
+                "facility_nbr": "INT_facility_NBR_02",
                 "sys_id": "INT_system_03",
 				"asset_code": "INT_asset_code_03",
 				"status_code": "up"
             },
             "INT_ASSET_NBR_04": {
-                "acct_nbr": "INT_ACCT_NBR_02",
-                "fac_nbr": "INT_FAC_NBR_02",
+                "account_nbr": "INT_account_NBR_02",
+                "facility_nbr": "INT_facility_NBR_02",
                 "sys_id": "INT_system_04",
 				"asset_code": "INT_asset_code_04",
 				"status_code": "down"
@@ -136,145 +136,145 @@ domains = {
     },
     "service": {
         "DOMAIN": "service",
-        "DOMAIN_SOLR_KEY": "svc_nbr",
+        "DOMAIN_SOLR_KEY": "service_nbr",
         "DOMAIN_SOLR_COLLECTION": "service",
         "UPSERT_PAYLOAD": json.dumps([
 			{
-				"acct_nbr": "INT_ACCT_NBR_01",
-				"fac_nbr": "INT_FAC_NBR_01",
+				"account_nbr": "INT_account_NBR_01",
+				"facility_nbr": "INT_facility_NBR_01",
 				"asset_nbr": "INT_ASSET_NBR_01",
-				"svc_nbr": "INT_INT_SVC_NBR_001",
-				"svc_code": "INT_SVC_001",
-				"svc_name": "Integration Service Name 001",
+				"service_nbr": "INT_INT_service_NBR_001",
+				"service_code": "INT_service_001",
+				"service_name": "Integration Service Name 001",
 				"status_code": "open"
 			},
 			{
-				"acct_nbr": "INT_ACCT_NBR_01",
-				"fac_nbr": "INT_FAC_NBR_01",
+				"account_nbr": "INT_account_NBR_01",
+				"facility_nbr": "INT_facility_NBR_01",
 				"asset_nbr": "INT_ASSET_NBR_01",
-				"svc_nbr": "INT_INT_SVC_NBR_002",
-				"svc_code": "INT_SVC_002",
-				"svc_name": "Integration Service Name 002",
+				"service_nbr": "INT_INT_service_NBR_002",
+				"service_code": "INT_service_002",
+				"service_name": "Integration Service Name 002",
 				"status_code": "close"
 			},
 			{
-				"acct_nbr": "INT_ACCT_NBR_01",
-				"fac_nbr": "INT_FAC_NBR_01",
+				"account_nbr": "INT_account_NBR_01",
+				"facility_nbr": "INT_facility_NBR_01",
 				"asset_nbr": "INT_ASSET_NBR_02",
-				"svc_nbr": "INT_INT_SVC_NBR_003",
-				"svc_code": "INT_SVC_003",
-				"svc_name": "Integration Service Name 003",
+				"service_nbr": "INT_INT_service_NBR_003",
+				"service_code": "INT_service_003",
+				"service_name": "Integration Service Name 003",
 				"status_code": "open"
 			},
 			{
-				"acct_nbr": "INT_ACCT_NBR_01",
-				"fac_nbr": "INT_FAC_NBR_01",
+				"account_nbr": "INT_account_NBR_01",
+				"facility_nbr": "INT_facility_NBR_01",
 				"asset_nbr": "INT_ASSET_NBR_02",
-				"svc_nbr": "INT_INT_SVC_NBR_004",
-				"svc_code": "INT_SVC_004",
-				"svc_name": "Integration Service Name 004",
+				"service_nbr": "INT_INT_service_NBR_004",
+				"service_code": "INT_service_004",
+				"service_name": "Integration Service Name 004",
 				"status_code": "close"
 			},
 			{
-				"acct_nbr": "INT_ACCT_NBR_01",
-				"fac_nbr": "INT_FAC_NBR_02",
+				"account_nbr": "INT_account_NBR_01",
+				"facility_nbr": "INT_facility_NBR_02",
 				"asset_nbr": "INT_ASSET_NBR_03",
-				"svc_nbr": "INT_INT_SVC_NBR_005",
-				"svc_code": "INT_SVC_005",
-				"svc_name": "Integration Service Name 005",
+				"service_nbr": "INT_INT_service_NBR_005",
+				"service_code": "INT_service_005",
+				"service_name": "Integration Service Name 005",
 				"status_code": "open"
 			},
 			{
-				"acct_nbr": "INT_ACCT_NBR_01",
-				"fac_nbr": "INT_FAC_NBR_02",
+				"account_nbr": "INT_account_NBR_01",
+				"facility_nbr": "INT_facility_NBR_02",
 				"asset_nbr": "INT_ASSET_NBR_03",
-				"svc_nbr": "INT_INT_SVC_NBR_006",
-				"svc_code": "INT_SVC_006",
-				"svc_name": "Integration Service Name 006",
+				"service_nbr": "INT_INT_service_NBR_006",
+				"service_code": "INT_service_006",
+				"service_name": "Integration Service Name 006",
 				"status_code": "close"
 			},
 			{
-				"acct_nbr": "INT_ACCT_NBR_01",
-				"fac_nbr": "INT_FAC_NBR_02",
+				"account_nbr": "INT_account_NBR_01",
+				"facility_nbr": "INT_facility_NBR_02",
 				"asset_nbr": "INT_ASSET_NBR_04",
-				"svc_nbr": "INT_INT_SVC_NBR_007",
-				"svc_code": "INT_SVC_007",
-				"svc_name": "Integration Service Name 007",
+				"service_nbr": "INT_INT_service_NBR_007",
+				"service_code": "INT_service_007",
+				"service_name": "Integration Service Name 007",
 				"status_code": "open"
 			},
 			{
-				"acct_nbr": "INT_ACCT_NBR_01",
-				"fac_nbr": "INT_FAC_NBR_02",
+				"account_nbr": "INT_account_NBR_01",
+				"facility_nbr": "INT_facility_NBR_02",
 				"asset_nbr": "INT_ASSET_NBR_04",
-				"svc_nbr": "INT_INT_SVC_NBR_008",
-				"svc_code": "INT_SVC_008",
-				"svc_name": "Integration Service Name 008",
+				"service_nbr": "INT_INT_service_NBR_008",
+				"service_code": "INT_service_008",
+				"service_name": "Integration Service Name 008",
 				"status_code": "close"
 			}
         ]),
         "SOLR_EXPECTED_RECORDS": json.dumps({
-            "INT_INT_SVC_NBR_001": {
-				"acct_nbr": "INT_ACCT_NBR_01",
-				"fac_nbr": "INT_FAC_NBR_01",
+            "INT_INT_service_NBR_001": {
+				"account_nbr": "INT_account_NBR_01",
+				"facility_nbr": "INT_facility_NBR_01",
 				"asset_nbr": "INT_ASSET_NBR_01",
-				"svc_code": "INT_SVC_001",
-				"svc_name": "Integration Service Name 001",
+				"service_code": "INT_service_001",
+				"service_name": "Integration Service Name 001",
 				"status_code": "open"
             },
-            "INT_INT_SVC_NBR_002": {
-				"acct_nbr": "INT_ACCT_NBR_01",
-				"fac_nbr": "INT_FAC_NBR_01",
+            "INT_INT_service_NBR_002": {
+				"account_nbr": "INT_account_NBR_01",
+				"facility_nbr": "INT_facility_NBR_01",
 				"asset_nbr": "INT_ASSET_NBR_01",
-				"svc_code": "INT_SVC_002",
-				"svc_name": "Integration Service Name 002",
+				"service_code": "INT_service_002",
+				"service_name": "Integration Service Name 002",
 				"status_code": "close"
             },
-            "INT_INT_SVC_NBR_003": {
-				"acct_nbr": "INT_ACCT_NBR_01",
-				"fac_nbr": "INT_FAC_NBR_01",
+            "INT_INT_service_NBR_003": {
+				"account_nbr": "INT_account_NBR_01",
+				"facility_nbr": "INT_facility_NBR_01",
 				"asset_nbr": "INT_ASSET_NBR_02",
-				"svc_code": "INT_SVC_003",
-				"svc_name": "Integration Service Name 003",
+				"service_code": "INT_service_003",
+				"service_name": "Integration Service Name 003",
 				"status_code": "open"
             },
-            "INT_INT_SVC_NBR_004": {
-				"acct_nbr": "INT_ACCT_NBR_01",
-				"fac_nbr": "INT_FAC_NBR_01",
+            "INT_INT_service_NBR_004": {
+				"account_nbr": "INT_account_NBR_01",
+				"facility_nbr": "INT_facility_NBR_01",
 				"asset_nbr": "INT_ASSET_NBR_02",
-				"svc_code": "INT_SVC_004",
-				"svc_name": "Integration Service Name 004",
+				"service_code": "INT_service_004",
+				"service_name": "Integration Service Name 004",
 				"status_code": "close"
             },
-            "INT_INT_SVC_NBR_005": {
-				"acct_nbr": "INT_ACCT_NBR_02",
-				"fac_nbr": "INT_FAC_NBR_02",
+            "INT_INT_service_NBR_005": {
+				"account_nbr": "INT_account_NBR_02",
+				"facility_nbr": "INT_facility_NBR_02",
 				"asset_nbr": "INT_ASSET_NBR_03",
-				"svc_code": "INT_SVC_005",
-				"svc_name": "Integration Service Name 005",
+				"service_code": "INT_service_005",
+				"service_name": "Integration Service Name 005",
 				"status_code": "open"
             },
-            "INT_INT_SVC_NBR_006": {
-				"acct_nbr": "INT_ACCT_NBR_02",
-				"fac_nbr": "INT_FAC_NBR_02",
+            "INT_INT_service_NBR_006": {
+				"account_nbr": "INT_account_NBR_02",
+				"facility_nbr": "INT_facility_NBR_02",
 				"asset_nbr": "INT_ASSET_NBR_03",
-				"svc_code": "INT_SVC_006",
-				"svc_name": "Integration Service Name 006",
+				"service_code": "INT_service_006",
+				"service_name": "Integration Service Name 006",
 				"status_code": "close"
             },
-            "INT_INT_SVC_NBR_007": {
-				"acct_nbr": "INT_ACCT_NBR_02",
-				"fac_nbr": "INT_FAC_NBR_02",
+            "INT_INT_service_NBR_007": {
+				"account_nbr": "INT_account_NBR_02",
+				"facility_nbr": "INT_facility_NBR_02",
 				"asset_nbr": "INT_ASSET_NBR_04",
-				"svc_code": "INT_SVC_007",
-				"svc_name": "Integration Service Name 007",
+				"service_code": "INT_service_007",
+				"service_name": "Integration Service Name 007",
 				"status_code": "open"
             },
-            "INT_INT_SVC_NBR_008": {
-				"acct_nbr": "INT_ACCT_NBR_02",
-				"fac_nbr": "INT_FAC_NBR_02",
+            "INT_INT_service_NBR_008": {
+				"account_nbr": "INT_account_NBR_02",
+				"facility_nbr": "INT_facility_NBR_02",
 				"asset_nbr": "INT_ASSET_NBR_04",
-				"svc_code": "INT_SVC_008",
-				"svc_name": "Integration Service Name 008",
+				"service_code": "INT_service_008",
+				"service_name": "Integration Service Name 008",
 				"status_code": "close"
             }
         })
