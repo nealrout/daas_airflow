@@ -13,7 +13,7 @@ def load_constants():
 
     return {
         "DOMAIN": DOMAIN,
-        "DOMAIN_KEY": Variable.get(f"{DOMAIN}_DOMAIN_KEY", default_var=""),
+        "DOMAIN_KEY": Variable.get(f"{DOMAIN}_DOMAIN_KEY", default_var="").strip('"'),
         "API_POST_DB_SEARCH": json.loads(Variable.get(f"{DOMAIN}_API_POST_DB_SEARCH", default_var="{}")),
         "API_POST_DB_SEARCH_RESULTS": json.loads(Variable.get(f"{DOMAIN}_API_POST_DB_SEARCH_RESULTS", default_var="{}")),
         "API_POST_CACHE_SEARCH": json.loads(Variable.get(f"{DOMAIN}_API_POST_CACHE_SEARCH", default_var="{}")),
@@ -172,8 +172,8 @@ with DAG(
         log_response=True,
     )
 
-    def validate_solr_response_func(primary_key="", **kwargs):
-        """Validate Solr response against expected records"""
+    def validate_cache_response_func(primary_key="", **kwargs):
+        """Validate cache response against expected records"""
         ti = kwargs["ti"]
         response = ti.xcom_pull(task_ids="call_api_post_cache_search")
         response_json = json.loads(response)
@@ -192,9 +192,9 @@ with DAG(
 
         print("✅ All expected records were found in Solr!")
 
-    validate_solr_response_task = PythonOperator(
-        task_id="validate_solr_response",
-        python_callable=validate_solr_response_func,
+    validate_cache_response_task = PythonOperator(
+        task_id="validate_cache_response",
+        python_callable=validate_cache_response_func,
         op_kwargs={"primary_key": DOMAIN_KEY},
         provide_context=True,
     )
@@ -203,5 +203,5 @@ with DAG(
         print_constants_task >> authenticate_task >> extract_token_task 
         >> call_api_get_all_task >> api_get_all_check_count_task 
         >> call_api_post_db_search_task >> validate_db_response_task 
-        >> call_api_post_cache_search_task >> validate_solr_response_task
+        >> call_api_post_cache_search_task >> validate_cache_response_task
     )

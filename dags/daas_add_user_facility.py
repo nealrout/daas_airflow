@@ -24,7 +24,7 @@ with DAG(
     # PostgresOperator with parameterized SQL
     add_user_facility_task = PostgresOperator(
         task_id="add_user_facility",
-        postgres_conn_id="postgres_us_int_daas",  # Ensure this matches your Airflow connection
+        postgres_conn_id="daas_postgres_us_int",  # Ensure this matches your Airflow connection
         sql="""
             WITH user_data AS (
                 SELECT id FROM get_auth_user(%(authorized_user)s) LIMIT 1

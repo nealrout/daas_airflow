@@ -1,0 +1,274 @@
+{
+    "account": {
+        "DOMAIN": "account",
+        "DOMAIN_CACHE_COLLECTION": "account",
+        "DOMAIN_CACHE_KEY": "account_nbr",
+        "CACHE_EXPECTED_RECORDS": {
+            "INT_ACCT_NBR_01": {
+                "account_code": "INT_US_ACCT_01",
+                "account_name": "Integration account 01"
+            },
+            "INT_ACCT_NBR_02": {
+                "account_code": "INT_US_ACCT_02",
+                "account_name": "Integration account 02"
+            }
+        },
+        "UPSERT_PAYLOAD": [
+            {
+                "account_code": "INT_US_ACCT_01",
+                "account_name": "Integration account 01",
+                "account_nbr": "INT_ACCT_NBR_01"
+            },
+            {
+                "account_code": "INT_US_ACCT_02",
+                "account_name": "Integration account 02",
+                "account_nbr": "INT_ACCT_NBR_02"
+            }
+        ]
+    },
+    "asset": {
+        "DOMAIN": "asset",
+        "DOMAIN_CACHE_COLLECTION": "asset",
+        "DOMAIN_CACHE_KEY": "asset_nbr",
+        "CACHE_EXPECTED_RECORDS": {
+            "INT_ASSET_NBR_01": {
+                "account_nbr": "INT_ACCT_NBR_01",
+                "asset_code": "INT_asset_code_01",
+                "facility_nbr": "INT_FAC_NBR_01",
+                "status_code": "up",
+                "sys_id": "INT_system_01"
+            },
+            "INT_ASSET_NBR_02": {
+                "account_nbr": "INT_ACCT_NBR_01",
+                "asset_code": "INT_asset_code_02",
+                "facility_nbr": "INT_FAC_NBR_01",
+                "status_code": "down",
+                "sys_id": "INT_system_02"
+            },
+            "INT_ASSET_NBR_03": {
+                "account_nbr": "INT_ACCT_NBR_02",
+                "asset_code": "INT_asset_code_03",
+                "facility_nbr": "INT_FAC_NBR_02",
+                "status_code": "up",
+                "sys_id": "INT_system_03"
+            },
+            "INT_ASSET_NBR_04": {
+                "account_nbr": "INT_ACCT_NBR_02",
+                "asset_code": "INT_asset_code_04",
+                "facility_nbr": "INT_FAC_NBR_02",
+                "status_code": "down",
+                "sys_id": "INT_system_04"
+            }
+        },
+        "UPSERT_PAYLOAD": [
+            {
+                "account_nbr": "INT_ACCT_NBR_01",
+                "asset_code": "INT_asset_code_01",
+                "asset_nbr": "INT_ASSET_NBR_01",
+                "facility_nbr": "INT_FAC_NBR_01",
+                "status_code": "up",
+                "sys_id": "INT_system_01"
+            },
+            {
+                "account_nbr": "INT_ACCT_NBR_01",
+                "asset_code": "INT_asset_code_02",
+                "asset_nbr": "INT_ASSET_NBR_02",
+                "facility_nbr": "INT_FAC_NBR_01",
+                "status_code": "down",
+                "sys_id": "INT_system_02"
+            },
+            {
+                "account_nbr": "INT_ACCT_NBR_02",
+                "asset_code": "INT_asset_code_03",
+                "asset_nbr": "INT_ASSET_NBR_03",
+                "facility_nbr": "INT_FAC_NBR_02",
+                "status_code": "up",
+                "sys_id": "INT_system_03"
+            },
+            {
+                "account_nbr": "INT_ACCT_NBR_02",
+                "asset_code": "INT_asset_code_04",
+                "asset_nbr": "INT_ASSET_NBR_04",
+                "facility_nbr": "INT_FAC_NBR_02",
+                "status_code": "down",
+                "sys_id": "INT_system_04"
+            }
+        ]
+    },
+    "facility": {
+        "DOMAIN": "facility",
+        "DOMAIN_CACHE_COLLECTION": "facility",
+        "DOMAIN_CACHE_KEY": "facility_nbr",
+        "CACHE_EXPECTED_RECORDS": {
+            "INT_FAC_NBR_01": {
+                "account_nbr": "INT_ACCT_NBR_01",
+                "facility_code": "INT_US_TEST_01",
+                "facility_name": "Integration facility 01"
+            },
+            "INT_FAC_NBR_02": {
+                "account_nbr": "INT_ACCT_NBR_02",
+                "facility_code": "INT_US_TEST_02",
+                "facility_name": "Integration facility 02"
+            }
+        },
+        "UPSERT_PAYLOAD": [
+            {
+                "account_nbr": "INT_ACCT_NBR_01",
+                "facility_code": "INT_US_TEST_01",
+                "facility_name": "Integration facility 01",
+                "facility_nbr": "INT_FAC_NBR_01"
+            },
+            {
+                "account_nbr": "INT_ACCT_NBR_02",
+                "facility_code": "INT_US_TEST_02",
+                "facility_name": "Integration facility 02",
+                "facility_nbr": "INT_FAC_NBR_02"
+            }
+        ]
+    },
+    "service": {
+        "DOMAIN": "service",
+        "DOMAIN_CACHE_COLLECTION": "service",
+        "DOMAIN_CACHE_KEY": "service_nbr",
+        "CACHE_EXPECTED_RECORDS": {
+            "INT_INT_SVC_NBR_001": {
+                "account_nbr": "INT_ACCT_NBR_01",
+                "asset_nbr": "INT_ASSET_NBR_01",
+                "facility_nbr": "INT_FAC_NBR_01",
+                "service_code": "INT_SVC_CODE_001",
+                "service_name": "Integration Service Name 001",
+                "status_code": "open"
+            },
+            "INT_INT_SVC_NBR_002": {
+                "account_nbr": "INT_ACCT_NBR_01",
+                "asset_nbr": "INT_ASSET_NBR_01",
+                "facility_nbr": "INT_FAC_NBR_01",
+                "service_code": "INT_SVC_CODE_002",
+                "service_name": "Integration Service Name 002",
+                "status_code": "close"
+            },
+            "INT_INT_SVC_NBR_003": {
+                "account_nbr": "INT_ACCT_NBR_01",
+                "asset_nbr": "INT_ASSET_NBR_02",
+                "facility_nbr": "INT_FAC_NBR_01",
+                "service_code": "INT_SVC_CODE_003",
+                "service_name": "Integration Service Name 003",
+                "status_code": "open"
+            },
+            "INT_INT_SVC_NBR_004": {
+                "account_nbr": "INT_ACCT_NBR_01",
+                "asset_nbr": "INT_ASSET_NBR_02",
+                "facility_nbr": "INT_FAC_NBR_01",
+                "service_code": "INT_SVC_CODE_004",
+                "service_name": "Integration Service Name 004",
+                "status_code": "close"
+            },
+            "INT_INT_SVC_NBR_005": {
+                "account_nbr": "INT_ACCT_NBR_02",
+                "asset_nbr": "INT_ASSET_NBR_03",
+                "facility_nbr": "INT_FAC_NBR_02",
+                "service_code": "INT_SVC_CODE_005",
+                "service_name": "Integration Service Name 005",
+                "status_code": "open"
+            },
+            "INT_INT_SVC_NBR_006": {
+                "account_nbr": "INT_ACCT_NBR_02",
+                "asset_nbr": "INT_ASSET_NBR_03",
+                "facility_nbr": "INT_FAC_NBR_02",
+                "service_code": "INT_SVC_CODE_006",
+                "service_name": "Integration Service Name 006",
+                "status_code": "close"
+            },
+            "INT_INT_SVC_NBR_007": {
+                "account_nbr": "INT_ACCT_NBR_02",
+                "asset_nbr": "INT_ASSET_NBR_04",
+                "facility_nbr": "INT_FAC_NBR_02",
+                "service_code": "INT_SVC_CODE_007",
+                "service_name": "Integration Service Name 007",
+                "status_code": "open"
+            },
+            "INT_INT_SVC_NBR_008": {
+                "account_nbr": "INT_ACCT_NBR_02",
+                "asset_nbr": "INT_ASSET_NBR_04",
+                "facility_nbr": "INT_FAC_NBR_02",
+                "service_code": "INT_SVC_CODE_008",
+                "service_name": "Integration Service Name 008",
+                "status_code": "close"
+            }
+        },
+        "UPSERT_PAYLOAD": [
+            {
+                "account_nbr": "INT_ACCT_NBR_01",
+                "asset_nbr": "INT_ASSET_NBR_01",
+                "facility_nbr": "INT_FAC_NBR_01",
+                "service_code": "INT_SVC_CODE_001",
+                "service_name": "Integration Service Name 001",
+                "service_nbr": "INT_INT_SVC_NBR_001",
+                "status_code": "open"
+            },
+            {
+                "account_nbr": "INT_ACCT_NBR_01",
+                "asset_nbr": "INT_ASSET_NBR_01",
+                "facility_nbr": "INT_FAC_NBR_01",
+                "service_code": "INT_SVC_CODE_002",
+                "service_name": "Integration Service Name 002",
+                "service_nbr": "INT_INT_SVC_NBR_002",
+                "status_code": "close"
+            },
+            {
+                "account_nbr": "INT_ACCT_NBR_01",
+                "asset_nbr": "INT_ASSET_NBR_02",
+                "facility_nbr": "INT_FAC_NBR_01",
+                "service_code": "INT_SVC_CODE_003",
+                "service_name": "Integration Service Name 003",
+                "service_nbr": "INT_INT_SVC_NBR_003",
+                "status_code": "open"
+            },
+            {
+                "account_nbr": "INT_ACCT_NBR_01",
+                "asset_nbr": "INT_ASSET_NBR_02",
+                "facility_nbr": "INT_FAC_NBR_01",
+                "service_code": "INT_SVC_CODE_004",
+                "service_name": "Integration Service Name 004",
+                "service_nbr": "INT_INT_SVC_NBR_004",
+                "status_code": "close"
+            },
+            {
+                "account_nbr": "INT_ACCT_NBR_01",
+                "asset_nbr": "INT_ASSET_NBR_03",
+                "facility_nbr": "INT_FAC_NBR_02",
+                "service_code": "INT_SVC_CODE_005",
+                "service_name": "Integration Service Name 005",
+                "service_nbr": "INT_INT_SVC_NBR_005",
+                "status_code": "open"
+            },
+            {
+                "account_nbr": "INT_ACCT_NBR_01",
+                "asset_nbr": "INT_ASSET_NBR_03",
+                "facility_nbr": "INT_FAC_NBR_02",
+                "service_code": "INT_SVC_CODE_006",
+                "service_name": "Integration Service Name 006",
+                "service_nbr": "INT_INT_SVC_NBR_006",
+                "status_code": "close"
+            },
+            {
+                "account_nbr": "INT_ACCT_NBR_01",
+                "asset_nbr": "INT_ASSET_NBR_04",
+                "facility_nbr": "INT_FAC_NBR_02",
+                "service_code": "INT_SVC_CODE_007",
+                "service_name": "Integration Service Name 007",
+                "service_nbr": "INT_INT_SVC_NBR_007",
+                "status_code": "open"
+            },
+            {
+                "account_nbr": "INT_ACCT_NBR_01",
+                "asset_nbr": "INT_ASSET_NBR_04",
+                "facility_nbr": "INT_FAC_NBR_02",
+                "service_code": "INT_SVC_CODE_008",
+                "service_name": "Integration Service Name 008",
+                "service_nbr": "INT_INT_SVC_NBR_008",
+                "status_code": "close"
+            }
+        ]
+    }
+}

@@ -13,10 +13,10 @@ def load_constants():
 
     return {
         "DOMAIN": DOMAIN,
-        "DOMAIN_CACHE_KEY": Variable.get(f"{DOMAIN}_DOMAIN_CACHE_KEY", default_var=""),
-        "DOMAIN_CACHE_COLLECTION": Variable.get(f"{DOMAIN}_DOMAIN_CACHE_COLLECTION", default_var=""),
+        "DOMAIN_CACHE_KEY": Variable.get(f"{DOMAIN}_DOMAIN_CACHE_KEY", default_var="").strip('"'),
+        "DOMAIN_CACHE_COLLECTION": Variable.get(f"{DOMAIN}_DOMAIN_CACHE_COLLECTION", default_var="").strip('"'),
         "UPSERT_PAYLOAD": json.loads(Variable.get(f"{DOMAIN}_UPSERT_PAYLOAD", default_var="[]")),
-        "SOLR_EXPECTED_RECORDS": json.loads(Variable.get(f"{DOMAIN}_CACHE_EXPECTED_RECORDS", default_var="{}"))
+        "CACHE_EXPECTED_RECORDS": json.loads(Variable.get(f"{DOMAIN}_CACHE_EXPECTED_RECORDS", default_var="{}"))
     }
 
 # Load constants ONCE when DAG is parsed
@@ -25,7 +25,7 @@ DOMAIN = CONSTANTS["DOMAIN"]
 DOMAIN_CACHE_KEY = CONSTANTS["DOMAIN_CACHE_KEY"]
 DOMAIN_CACHE_COLLECTION = CONSTANTS["DOMAIN_CACHE_COLLECTION"]
 UPSERT_PAYLOAD = CONSTANTS["UPSERT_PAYLOAD"]
-SOLR_EXPECTED_RECORDS = CONSTANTS["SOLR_EXPECTED_RECORDS"]
+CACHE_EXPECTED_RECORDS = CONSTANTS["CACHE_EXPECTED_RECORDS"]
 
 with DAG(
     dag_id="daas_insert_generic",
@@ -39,7 +39,7 @@ with DAG(
         print (f"💡DOMAIN_CACHE_KEY:💡 {DOMAIN_CACHE_KEY}")
         print (f"💡DOMAIN_CACHE_COLLECTION:💡 {DOMAIN_CACHE_COLLECTION}")
         print (f"💡UPSERT_PAYLOAD:💡 {UPSERT_PAYLOAD}")
-        print (f"💡SOLR_EXPECTED_RECORDS:💡 {SOLR_EXPECTED_RECORDS}")
+        print (f"💡CACHE_EXPECTED_RECORDS:💡 {CACHE_EXPECTED_RECORDS}")
 
     print_constants_task = PythonOperator(
         task_id="print_constants",
@@ -92,19 +92,19 @@ with DAG(
         log_response=True,
     )
 
-    query_solr_task = SimpleHttpOperator(
-        task_id="query_solr",
-        http_conn_id="solr_integration",
+    query_cache_task = SimpleHttpOperator(
+        task_id="query_cache",
+        http_conn_id="daas_cache_integration",
         endpoint=f"/solr/{DOMAIN_CACHE_COLLECTION}/select?q={DOMAIN_CACHE_KEY}:INT_*",
         method="GET",
         log_response=True,
         do_xcom_push=True,
     )
 
-    def validate_solr_response_func(primary_key="", **kwargs):
-        """Validate Solr response against expected records"""
+    def validate_cache_response_func(primary_key="", **kwargs):
+        """Validate cache response against expected records"""
         ti = kwargs["ti"]
-        response = ti.xcom_pull(task_ids="query_solr")
+        response = ti.xcom_pull(task_ids="query_cache")
         response_json = json.loads(response)
 
         docs = response_json.get("response", {}).get("docs", [])
@@ -113,7 +113,7 @@ with DAG(
 
         print("✅ Found records:", found_records)
 
-        for nbr, expected_values in SOLR_EXPECTED_RECORDS.items():
+        for nbr, expected_values in CACHE_EXPECTED_RECORDS.items():
             if nbr not in found_records:
                 raise ValueError(f"❌ Missing expected record: {nbr}")
             if not all(item in found_records[nbr].items() for item in expected_values.items()):
@@ -123,7 +123,7 @@ with DAG(
 
     validate_solr_task = PythonOperator(
         task_id="validate_solr_response",
-        python_callable=validate_solr_response_func,
+        python_callable=validate_cache_response_func,
         op_kwargs={"primary_key": DOMAIN_CACHE_KEY},
         provide_context=True,
     )
@@ -133,4 +133,4 @@ with DAG(
         delta=timedelta(seconds=15),
     )
 
-    print_constants_task >> authenticate_task >> extract_token_task >> push_domain_upsert_task >> wait_task_task >> query_solr_task >> validate_solr_task
+    print_constants_task >> authenticate_task >> extract_token_task >> push_domain_upsert_task >> wait_task_task >> query_cache_task >> validate_solr_task

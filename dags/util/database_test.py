@@ -13,7 +13,7 @@ with DAG(
     # Query the local PostgreSQL database from Airflow (inside Docker)
     test_postgres = PostgresOperator(
         task_id="test_local_postgres",
-        postgres_conn_id="postgres_us_int_daas",  # ✅ Uses the Airflow Connection we set up
+        postgres_conn_id="daas_postgres_us_int",  # ✅ Uses the Airflow Connection we set up
         sql="SELECT NOW();",  # Simple query to test connection
     )
 

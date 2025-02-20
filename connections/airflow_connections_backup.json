@@ -64,7 +64,7 @@
         "schema": ""
     },
     {
-        "conn_id": "solr_integration",
+        "conn_id": "daas_cache_integration",
         "conn_type": "http",
         "description": "",
         "extra_dejson": {
@@ -80,7 +80,7 @@
         "schema": ""
     },
     {
-        "conn_id": "postgres_us_int_daas",
+        "conn_id": "daas_postgres_us_int",
         "conn_type": "postgres",
         "description": "",
         "extra_dejson": {
@@ -92,7 +92,7 @@
         "is_encrypted": "False",
         "is_extra_encrypted": "False",
         "login": "daas",
-        "password": "d44spwn",
+        "password": "UPDATEME",
         "port": "5432",
         "schema": "us_int_daas"
     },

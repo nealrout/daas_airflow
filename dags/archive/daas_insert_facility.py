@@ -26,7 +26,7 @@ UPSERT_PAYLOAD = [
     }
 ]
 
-SOLR_EXPECTED_RECORDS = {
+CACHE_EXPECTED_RECORDS = {
     "INT_FAC_NBR_01": {
         "acct_nbr": "INT_ACCT_NBR_01",
         "fac_code": "INT_US_TEST_01",
@@ -99,7 +99,7 @@ with DAG(
     
     query_solr = SimpleHttpOperator(
         task_id="query_solr",
-        http_conn_id="solr_integration", 
+        http_conn_id="daas_cache_integration", 
         endpoint=f"/solr/{DOMAIN_SOLR_COLLECTION}/select?q={DOMAIN_SOLR_KEY}:INT_*",
         method="GET",
         log_response=True,
@@ -124,7 +124,7 @@ with DAG(
         print("✅ Found records:", found_records)
         
         # Example validation: Check if expected records exist
-        for nbr, expected_values in SOLR_EXPECTED_RECORDS.items():
+        for nbr, expected_values in CACHE_EXPECTED_RECORDS.items():
             if nbr not in found_records:
                 raise ValueError(f"❌ Missing expected record: {nbr}")
             if not all(item in found_records[nbr].items() for item in expected_values.items()):
