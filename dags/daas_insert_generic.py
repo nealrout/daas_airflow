@@ -13,17 +13,17 @@ def load_constants():
 
     return {
         "DOMAIN": DOMAIN,
-        "DOMAIN_SOLR_KEY": Variable.get(f"{DOMAIN}_DOMAIN_SOLR_KEY", default_var=""),
-        "DOMAIN_SOLR_COLLECTION": Variable.get(f"{DOMAIN}_DOMAIN_SOLR_COLLECTION", default_var=""),
+        "DOMAIN_CACHE_KEY": Variable.get(f"{DOMAIN}_DOMAIN_CACHE_KEY", default_var=""),
+        "DOMAIN_CACHE_COLLECTION": Variable.get(f"{DOMAIN}_DOMAIN_CACHE_COLLECTION", default_var=""),
         "UPSERT_PAYLOAD": json.loads(Variable.get(f"{DOMAIN}_UPSERT_PAYLOAD", default_var="[]")),
-        "SOLR_EXPECTED_RECORDS": json.loads(Variable.get(f"{DOMAIN}_SOLR_EXPECTED_RECORDS", default_var="{}"))
+        "SOLR_EXPECTED_RECORDS": json.loads(Variable.get(f"{DOMAIN}_CACHE_EXPECTED_RECORDS", default_var="{}"))
     }
 
 # Load constants ONCE when DAG is parsed
 CONSTANTS = load_constants()
 DOMAIN = CONSTANTS["DOMAIN"]
-DOMAIN_SOLR_KEY = CONSTANTS["DOMAIN_SOLR_KEY"]
-DOMAIN_SOLR_COLLECTION = CONSTANTS["DOMAIN_SOLR_COLLECTION"]
+DOMAIN_CACHE_KEY = CONSTANTS["DOMAIN_CACHE_KEY"]
+DOMAIN_CACHE_COLLECTION = CONSTANTS["DOMAIN_CACHE_COLLECTION"]
 UPSERT_PAYLOAD = CONSTANTS["UPSERT_PAYLOAD"]
 SOLR_EXPECTED_RECORDS = CONSTANTS["SOLR_EXPECTED_RECORDS"]
 
@@ -34,20 +34,20 @@ with DAG(
     catchup=False,
 ) as dag:
     
-    def print_constant_values():
+    def print_constant_values_func():
         print (f"💡DOMAIN:💡 {DOMAIN}")
-        print (f"💡DOMAIN_SOLR_KEY:💡 {DOMAIN_SOLR_KEY}")
-        print (f"💡DOMAIN_SOLR_COLLECTION:💡 {DOMAIN_SOLR_COLLECTION}")
+        print (f"💡DOMAIN_CACHE_KEY:💡 {DOMAIN_CACHE_KEY}")
+        print (f"💡DOMAIN_CACHE_COLLECTION:💡 {DOMAIN_CACHE_COLLECTION}")
         print (f"💡UPSERT_PAYLOAD:💡 {UPSERT_PAYLOAD}")
         print (f"💡SOLR_EXPECTED_RECORDS:💡 {SOLR_EXPECTED_RECORDS}")
 
-    print_constants = PythonOperator(
+    print_constants_task = PythonOperator(
         task_id="print_constants",
-        python_callable=print_constant_values,
+        python_callable=print_constant_values_func,
         provide_context=True,
     )
 
-    authenticate = SimpleHttpOperator(
+    authenticate_task = SimpleHttpOperator(
         task_id="get_auth_token",
         http_conn_id="daas_auth",
         endpoint="/api/auth/login/",
@@ -58,7 +58,7 @@ with DAG(
         do_xcom_push=True,
     )
 
-    def extract_token(**kwargs):
+    def extract_token_func(**kwargs):
         """Extract and store auth token from API response"""
         ti = kwargs["ti"]
         response = ti.xcom_pull(task_ids="get_auth_token")
@@ -75,11 +75,11 @@ with DAG(
 
     extract_token_task = PythonOperator(
         task_id="extract_token",
-        python_callable=extract_token,
+        python_callable=extract_token_func,
         provide_context=True,
     )
 
-    push_domain_upsert = SimpleHttpOperator(
+    push_domain_upsert_task = SimpleHttpOperator(
         task_id=f"push_domain_upsert",
         http_conn_id=f"daas_api_{DOMAIN}",
         endpoint=f"/api/{DOMAIN}/db/upsert/?facility=ALL",
@@ -92,16 +92,16 @@ with DAG(
         log_response=True,
     )
 
-    query_solr = SimpleHttpOperator(
+    query_solr_task = SimpleHttpOperator(
         task_id="query_solr",
         http_conn_id="solr_integration",
-        endpoint=f"solr/{DOMAIN_SOLR_COLLECTION}/select?q={DOMAIN_SOLR_KEY}:INT_*",
+        endpoint=f"/solr/{DOMAIN_CACHE_COLLECTION}/select?q={DOMAIN_CACHE_KEY}:INT_*",
         method="GET",
         log_response=True,
         do_xcom_push=True,
     )
 
-    def validate_solr_response(primary_key="", **kwargs):
+    def validate_solr_response_func(primary_key="", **kwargs):
         """Validate Solr response against expected records"""
         ti = kwargs["ti"]
         response = ti.xcom_pull(task_ids="query_solr")
@@ -123,14 +123,14 @@ with DAG(
 
     validate_solr_task = PythonOperator(
         task_id="validate_solr_response",
-        python_callable=validate_solr_response,
-        op_kwargs={"primary_key": DOMAIN_SOLR_KEY},
+        python_callable=validate_solr_response_func,
+        op_kwargs={"primary_key": DOMAIN_CACHE_KEY},
         provide_context=True,
     )
 
-    wait_task = TimeDeltaSensorAsync(
+    wait_task_task = TimeDeltaSensorAsync(
         task_id="wait_15_seconds",
         delta=timedelta(seconds=15),
     )
 
-    print_constants >> authenticate >> extract_token_task >> push_domain_upsert >> wait_task >> query_solr >> validate_solr_task
+    print_constants_task >> authenticate_task >> extract_token_task >> push_domain_upsert_task >> wait_task_task >> query_solr_task >> validate_solr_task

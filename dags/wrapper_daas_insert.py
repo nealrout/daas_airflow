@@ -9,8 +9,8 @@ from airflow.utils.dates import days_ago # type: ignore
 domains = {
     "account": {
         "DOMAIN": "account",
-        "DOMAIN_SOLR_KEY": "account_nbr",
-        "DOMAIN_SOLR_COLLECTION": "account",
+        "DOMAIN_CACHE_KEY": "account_nbr",
+        "DOMAIN_CACHE_COLLECTION": "account",
         "UPSERT_PAYLOAD": json.dumps([
             {
                 "account_nbr": "INT_ACCT_NBR_01",
@@ -36,8 +36,8 @@ domains = {
     },
     "facility": {
         "DOMAIN": "facility",
-        "DOMAIN_SOLR_KEY": "facility_nbr",
-        "DOMAIN_SOLR_COLLECTION": "facility",
+        "DOMAIN_CACHE_KEY": "facility_nbr",
+        "DOMAIN_CACHE_COLLECTION": "facility",
         "UPSERT_PAYLOAD": json.dumps([
             {
                 "account_nbr": "INT_ACCT_NBR_01",
@@ -67,8 +67,8 @@ domains = {
     },
     "asset": {
         "DOMAIN": "asset",
-        "DOMAIN_SOLR_KEY": "asset_nbr",
-        "DOMAIN_SOLR_COLLECTION": "asset",
+        "DOMAIN_CACHE_KEY": "asset_nbr",
+        "DOMAIN_CACHE_COLLECTION": "asset",
         "UPSERT_PAYLOAD": json.dumps([
 			{
 				"account_nbr": "INT_ACCT_NBR_01",
@@ -136,8 +136,8 @@ domains = {
     },
     "service": {
         "DOMAIN": "service",
-        "DOMAIN_SOLR_KEY": "service_nbr",
-        "DOMAIN_SOLR_COLLECTION": "service",
+        "DOMAIN_CACHE_KEY": "service_nbr",
+        "DOMAIN_CACHE_COLLECTION": "service",
         "UPSERT_PAYLOAD": json.dumps([
 			{
 				"account_nbr": "INT_ACCT_NBR_01",
@@ -299,21 +299,21 @@ with DAG(
     catchup=False,
 ) as dag:
     # Task to delete all test data before starting.
-    trigger_cleanup = TriggerDagRunOperator(
+    trigger_cleanup_task = TriggerDagRunOperator(
         task_id="daas_cleanup",
         trigger_dag_id="daas_cleanup",  
         wait_for_completion=True,  
     )
 
     # Task to set DOMAIN for "account"
-    set_domain_account = PythonOperator(
+    set_domain_account_task = PythonOperator(
         task_id="set_domain_account",
         python_callable=set_domain_variable,
         op_kwargs={"domain": "account"},
     )
 
     # Trigger `account` DAG first and wait for completion
-    trigger_account = TriggerDagRunOperator(
+    trigger_account_task = TriggerDagRunOperator(
         task_id="daas_insert_generic_account",
         trigger_dag_id="daas_insert_generic",
         conf={"DOMAIN": "account"},
@@ -321,14 +321,14 @@ with DAG(
     )
 
     # Task to set DOMAIN for "facility"
-    set_domain_facility = PythonOperator(
+    set_domain_facility_task = PythonOperator(
         task_id="set_domain_facility",
         python_callable=set_domain_variable,
         op_kwargs={"domain": "facility"},
     )
 
     # Trigger `facility` DAG only after `account` DAG finishes
-    trigger_facility = TriggerDagRunOperator(
+    trigger_facility_task = TriggerDagRunOperator(
         task_id="daas_insert_generic_facility",
         trigger_dag_id="daas_insert_generic",
         conf={"DOMAIN": "facility"},
@@ -336,14 +336,14 @@ with DAG(
     )
 
     # Task to set DOMAIN for "asset"
-    set_domain_asset = PythonOperator(
+    set_domain_asset_task = PythonOperator(
         task_id="set_domain_asset",
         python_callable=set_domain_variable,
         op_kwargs={"domain": "asset"},
     )
 
     # Trigger `asset` DAG only after `facility` DAG finishes
-    trigger_asset = TriggerDagRunOperator(
+    trigger_asset_task = TriggerDagRunOperator(
         task_id="daas_insert_generic_asset",
         trigger_dag_id="daas_insert_generic",
         conf={"DOMAIN": "asset"},
@@ -351,14 +351,14 @@ with DAG(
     )
 
     # Task to set DOMAIN for "service"
-    set_domain_service = PythonOperator(
+    set_domain_service_task = PythonOperator(
         task_id="set_domain_service",
         python_callable=set_domain_variable,
         op_kwargs={"domain": "service"},
     )
 
     # Trigger `service` DAG only after `asset` DAG finishes
-    trigger_service = TriggerDagRunOperator(
+    trigger_service_task = TriggerDagRunOperator(
         task_id="daas_insert_generic_service",
         trigger_dag_id="daas_insert_generic",
         conf={"DOMAIN": "service"},
@@ -372,6 +372,10 @@ with DAG(
     #     wait_for_completion=True,  
     # )
 
-
-    # Ensure sequential execution: set DOMAIN → trigger DAG → set DOMAIN → trigger DAG
-    trigger_cleanup >> set_domain_account >> trigger_account >> set_domain_facility >> trigger_facility >> set_domain_asset >> trigger_asset >> set_domain_service >> trigger_service
+    (
+        trigger_cleanup_task 
+        >> set_domain_account_task >> trigger_account_task 
+        >> set_domain_facility_task >> trigger_facility_task 
+        >> set_domain_asset_task >> trigger_asset_task 
+        >> set_domain_service_task >> trigger_service_task
+    )

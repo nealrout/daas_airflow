@@ -69,3 +69,6 @@ http://localhost:8080
 
 -- to reload dags
 docker exec -it airflow-docker-airflow-scheduler-1 airflow dags reserialize
+
+-- to reset all metadata
+docker exec -it airflow-docker-airflow-scheduler-1 airflow db reset

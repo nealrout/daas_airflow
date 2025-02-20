@@ -1,0 +1,5 @@
+docker cp D:\src\github\daas_airflow\connections\import_airflow_connections.py airflow-docker-airflow-scheduler-1:/opt/airflow/
+
+docker cp D:\src\github\daas_airflow\connections\airflow_connections_backup.json airflow-docker-airflow-scheduler-1:/opt/airflow/
+
+docker exec -it airflow-docker-airflow-scheduler-1 bash -c "python3 /opt/airflow/import_airflow_connections.py"

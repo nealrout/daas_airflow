@@ -100,7 +100,7 @@ with DAG(
     query_solr = SimpleHttpOperator(
         task_id="query_solr",
         http_conn_id="solr_integration", 
-        endpoint=f"solr/{DOMAIN_SOLR_COLLECTION}/select?q={DOMAIN_SOLR_KEY}:INT_*",
+        endpoint=f"/solr/{DOMAIN_SOLR_COLLECTION}/select?q={DOMAIN_SOLR_KEY}:INT_*",
         method="GET",
         log_response=True,
         do_xcom_push=True,  

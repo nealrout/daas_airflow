@@ -98,7 +98,7 @@ with DAG(
     query_solr = SimpleHttpOperator(
         task_id="query_solr",
         http_conn_id="solr_integration", 
-        endpoint=f"solr/{SOLR_COLLECTION_ACCOUNT}/select?q=acct_nbr:INT_*",
+        endpoint=f"/solr/{SOLR_COLLECTION_ACCOUNT}/select?q=acct_nbr:INT_*",
         method="GET",
         log_response=True,
         do_xcom_push=True,  
