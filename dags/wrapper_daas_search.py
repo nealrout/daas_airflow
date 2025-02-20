@@ -31,6 +31,10 @@ with DAG(
     catchup=False,
 ) as dag:
 
+    def log_child_dag_execution_func(context):
+        triggered_run_id = context["task_instance"].xcom_pull(task_ids="trigger_child_dag")
+        print(f"🔗 Click here to open Child DAG: http://your-airflow-url/dags/child_dag/grid?execution_date={triggered_run_id}")
+
     # Task to set DOMAIN for "account"
     set_domain_account = PythonOperator(
         task_id="set_domain_account",
@@ -43,7 +47,8 @@ with DAG(
         task_id="daas_search_generic_account",
         trigger_dag_id="daas_search_generic",
         conf={"DOMAIN": "account"},
-        wait_for_completion=True,  
+        wait_for_completion=True,
+        on_success_callback=log_child_dag_execution_func
     )
 
     # Task to set DOMAIN for "facility"
@@ -58,7 +63,8 @@ with DAG(
         task_id="daas_search_generic_facility",
         trigger_dag_id="daas_search_generic",
         conf={"DOMAIN": "facility"},
-        wait_for_completion=True,  
+        wait_for_completion=True,
+        on_success_callback=log_child_dag_execution_func
     )
 
     # Task to set DOMAIN for "asset"
@@ -73,7 +79,8 @@ with DAG(
         task_id="daas_search_generic_asset",
         trigger_dag_id="daas_search_generic",
         conf={"DOMAIN": "asset"},
-        wait_for_completion=True,  
+        wait_for_completion=True,
+        on_success_callback=log_child_dag_execution_func
     )
 
     # Task to set DOMAIN for "service"
@@ -88,7 +95,8 @@ with DAG(
         task_id="daas_search_generic_service",
         trigger_dag_id="daas_search_generic",
         conf={"DOMAIN": "service"},
-        wait_for_completion=True,  
+        wait_for_completion=True,
+        on_success_callback=log_child_dag_execution_func
     )
 
     # Ensure sequential execution: set DOMAIN → trigger DAG → set DOMAIN → trigger DAG

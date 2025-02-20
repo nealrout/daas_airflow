@@ -30,11 +30,16 @@ with DAG(
     start_date=days_ago(1),
     catchup=False,
 ) as dag:
+    def log_child_dag_execution_func(context):
+        triggered_run_id = context["task_instance"].xcom_pull(task_ids="trigger_child_dag")
+        print(f"🔗 Click here to open Child DAG: http://your-airflow-url/dags/child_dag/grid?execution_date={triggered_run_id}")
+
     # Task to delete all test data before starting.
     trigger_cleanup_task = TriggerDagRunOperator(
         task_id="daas_cleanup",
         trigger_dag_id="daas_cleanup",  
-        wait_for_completion=True,  
+        wait_for_completion=True,
+        on_success_callback=log_child_dag_execution_func
     )
 
     # Task to set DOMAIN for "account"
@@ -49,7 +54,8 @@ with DAG(
         task_id="daas_insert_generic_account",
         trigger_dag_id="daas_insert_generic",
         conf={"DOMAIN": "account"},
-        wait_for_completion=True,  
+        wait_for_completion=True,
+        on_success_callback=log_child_dag_execution_func
     )
 
     # Task to set DOMAIN for "facility"
@@ -64,7 +70,8 @@ with DAG(
         task_id="daas_insert_generic_facility",
         trigger_dag_id="daas_insert_generic",
         conf={"DOMAIN": "facility"},
-        wait_for_completion=True,  
+        wait_for_completion=True,
+        on_success_callback=log_child_dag_execution_func
     )
 
     # Task to set DOMAIN for "asset"
@@ -79,7 +86,8 @@ with DAG(
         task_id="daas_insert_generic_asset",
         trigger_dag_id="daas_insert_generic",
         conf={"DOMAIN": "asset"},
-        wait_for_completion=True,  
+        wait_for_completion=True,
+        on_success_callback=log_child_dag_execution_func
     )
 
     # Task to set DOMAIN for "service"
@@ -94,7 +102,8 @@ with DAG(
         task_id="daas_insert_generic_service",
         trigger_dag_id="daas_insert_generic",
         conf={"DOMAIN": "service"},
-        wait_for_completion=True,  
+        wait_for_completion=True,
+        on_success_callback=log_child_dag_execution_func
     )
 
     # # Trigger daas_add_user_facility
